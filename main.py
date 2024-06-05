@@ -55,3 +55,22 @@ def get_ticker_info(codigo_ticker: str):
             }
     return {"error": "Cotação não encontrada"}
 
+
+@app.get("/moedas")
+def get_moedas():
+    url = "https://raw.githubusercontent.com/ourworldincode/currency/main/currencies.json"
+    try:
+        response = requests.get(url)
+        all_currencies_dict = response.json()
+        filtered_currencies = []
+
+        for code, details in all_currencies_dict.items():
+            filtered_currencies.append({
+                "codigo": code,
+                "nome": details["name"],
+                "simbolo": details["symbol"]
+            })
+
+        return filtered_currencies
+    except Exception as e:
+        return {"error": str(e)}
